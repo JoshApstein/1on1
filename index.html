@@ -211,7 +211,6 @@
 
       $('form').submit(function(ev) {
         ev.preventDefault();
-        console.log(timeObj);
         if (timeObj[this.id][$(this).children('.time').val()].length < 2 && !localStorage.getItem('something')){
           studentDB.push({name:$(this).children('.name').val(), time: $(this).children('.time').val(), day: this.id}).then(function() {
             // appt made
@@ -250,7 +249,6 @@
           '3:45': []
         }};
       studentDB.on('child_added', function(snap) {
-        console.log(snap.val());
         var currObj = snap.val();
         if (timeObj[currObj.day][currObj.time].length < 2) {
           timeObj[currObj.day][currObj.time].push(currObj.name);
