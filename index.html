@@ -172,8 +172,10 @@
       crossorigin="anonymous"></script>
     <script type="text/javascript">
       var studentDB = firebase.database().ref('students');
-      var instructorDB = firebase.database().ref('instructors');
-
+      var day = new Date().getDay();
+      if (day === 5 || day === 0) {
+        studentDB.remove();
+      }
       $('form').submit(function(ev) {
         ev.preventDefault();
         if (timeObj[this.id][$(this).children('.time').val()].length < 2 && !localStorage.getItem('something')){
