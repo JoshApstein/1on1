@@ -172,7 +172,29 @@
       crossorigin="anonymous"></script>
     <script type="text/javascript">
       var studentDB = firebase.database().ref('students');
+      var counterDB = firebase.database().ref();
+      var provider = new firebase.auth.GithubAuthProvider();
+
+      var counter = 2;
       var day = new Date().getDay();
+      console.log('hi');
+      firebase.auth().signInWithPopup(provider).then(function(result) {
+        // This gives you a GitHub Access Token. You can use it to access the GitHub API.
+        console.log(result.credential.accessToken);
+        // The signed-in user info.
+        var user = result.user;
+        console.log(user);
+        // ...
+      }).catch(function(error) {
+        // Handle Errors here.
+        var errorCode = error.code;
+        var errorMessage = error.message;
+        // The email of the user's account used.
+        var email = error.email;
+        // The firebase.auth.AuthCredential type that was used.
+        var credential = error.credential;
+        // ...
+      });
       if (day === 6 || day === 5) {
         studentDB.remove();
       }
@@ -181,7 +203,7 @@
         if (timeObj[this.id][$(this).children('.time').val()].length < 2 && !localStorage.getItem('something')){
           studentDB.push({name:$(this).children('.name').val(), time: $(this).children('.time').val(), day: this.id}).then(function() {
             // appt made
-            localStorage.setItem('something', 'true');
+            localStorage.setItem('something', counter);
           });
         } else {
           if (localStorage.getItem('something')) alert('You can only book one slot per week');
@@ -215,6 +237,8 @@
           '3:30': [],
           '3:45': []
         }};
+      counterDB.on('value', function(snap) {
+      });
       studentDB.on('child_added', function(snap) {
         var currObj = snap.val();
         if (timeObj[currObj.day][currObj.time].length < 2) {
