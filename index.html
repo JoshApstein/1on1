@@ -173,7 +173,7 @@
     <script type="text/javascript">
       var studentDB = firebase.database().ref('students');
       var day = new Date().getDay();
-      if (day === 5 || day === 0) {
+      if (day === 6) {
         studentDB.remove();
       }
       $('form').submit(function(ev) {
