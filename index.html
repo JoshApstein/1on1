@@ -174,7 +174,8 @@
       var studentDB = firebase.database().ref('students');
       var counterDB = firebase.database().ref();
       var provider = new firebase.auth.GithubAuthProvider();
-
+      var email = '';
+      var emails = [];
       var counter = 2;
       var day = new Date().getDay();
       console.log('hi');
@@ -193,7 +194,7 @@
         }
         // The signed-in user info.
         var user = result.user;
-        console.log(user);
+        email = user.email;
       }).catch(function(error) {
         // Handle Errors here.
         var errorCode = error.code;
@@ -226,13 +227,12 @@
       }
       $('form').submit(function(ev) {
         ev.preventDefault();
-        if (timeObj[this.id][$(this).children('.time').val()].length < 2 && !localStorage.getItem('something')){
-          studentDB.push({name:$(this).children('.name').val(), time: $(this).children('.time').val(), day: this.id}).then(function() {
+        if (timeObj[this.id][$(this).children('.time').val()].length < 2 && emails.indexOf(email) === -1){
+          studentDB.push({name:$(this).children('.name').val(), time: $(this).children('.time').val(), day: this.id, email:email}).then(function() {
             // appt made
-            localStorage.setItem('something', counter);
           });
         } else {
-          if (localStorage.getItem('something')) alert('You can only book one slot per week');
+          if (emails.indexOf(email) !== -1) alert('You can only book one slot per week');
           else alert("Booked Up, please choose another time, or day");
         }
       });
@@ -267,6 +267,7 @@
       });
       studentDB.on('child_added', function(snap) {
         var currObj = snap.val();
+        emails.push(currObj.email);
         if (timeObj[currObj.day][currObj.time].length < 2) {
           timeObj[currObj.day][currObj.time].push(currObj.name);
         }
