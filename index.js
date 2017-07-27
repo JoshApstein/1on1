@@ -33,7 +33,8 @@ var timeObj = {
     '3:15': [],
     '3:30': [],
     '3:45': []
-  }};
+  }
+};
 
 // add people to html
 studentDB.on('child_added', function(snap) {
@@ -42,10 +43,15 @@ studentDB.on('child_added', function(snap) {
   if (timeObj[currObj.day][currObj.time].length < 2) {
     timeObj[currObj.day][currObj.time].push(currObj.name);
   }
-  console.log(email, currObj.email)
+  console.log(snap.key)
   var selector = '#' + currObj.day + currObj.time.replace(/\:/, '\\3a ');
-  email === currObj.email ? $(selector).append('<li>' + currObj.name + '<button class="cancel">Cancel</button</li>') : $(selector).append('<li>' + currObj.name + '</li>');
+  email === currObj.email ?
+    $(selector).append('<li>' + currObj.name + '&nbsp;<button class="btn btn-danger" id="cancel">Cancel</button</li>') :
+    $(selector).append('<li>' + currObj.name + '</li>');
 
+    $('#cancel').click(function() {
+      studentDB.child(snap.key).child('email').remove();
+    })
 
 })
 
@@ -90,3 +96,4 @@ $('form').submit(function(ev) {
     else alert("Booked Up, please choose another time, or day");
   }
 });
+// cancel clicked
