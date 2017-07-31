@@ -48,7 +48,7 @@ studentDB.on('child_added', function(snap) {
   if (email === currObj.email) {
     $(selector).append('<li>' + currObj.name + '&nbsp;<button class="btn btn-danger" id="cancel" value="' + snap.key + '">Cancel</button</li>');
     $('#cancel').click(function() {
-      studentDB.child(snap.key).child('email').remove();
+      studentDB.child(snap.key).remove();
     })
   } else {
     $(selector).append('<li>' + currObj.name + '</li>');
